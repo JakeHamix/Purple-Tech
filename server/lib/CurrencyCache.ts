@@ -1,20 +1,20 @@
 import { LRUCache } from 'lru-cache';
-import { Converter } from 'easy-currencies';
+import { rateObject } from 'easy-currencies/src/converter';
 
-class CurrencyProviderCacheSingleton {
+class CurrencyProviderRateCacheSingleton {
   // Private constructor to prevent direct instantiation
   private constructor() {}
 
   // Singleton instance
-  private static instance: LRUCache<string, Converter>;
+  private static instance: LRUCache<string, rateObject>;
 
-  public static get Instance(): LRUCache<string, Converter> {
-    if (CurrencyProviderCacheSingleton.instance === undefined) {
-      CurrencyProviderCacheSingleton.instance = new LRUCache<string, Converter>({
+  public static get Instance(): LRUCache<string, rateObject> {
+    if (CurrencyProviderRateCacheSingleton.instance === undefined) {
+      CurrencyProviderRateCacheSingleton.instance = new LRUCache<string, rateObject>({
         // The maximum number of items that remain in the cache (assuming no TTL pruning or explicit deletions).
         // Note that fewer items may be stored if size calculation is used, and maxSize is exceeded.
         // This must be a positive finite integer.
-        max: 1,
+        max: 5000,
 
         // How long to live in ms => 60 seconds for demonstration purposes
         ttl: 1000 * 60,
@@ -26,9 +26,9 @@ class CurrencyProviderCacheSingleton {
         updateAgeOnHas: false,
       });
     }
-    return CurrencyProviderCacheSingleton.instance;
+    return CurrencyProviderRateCacheSingleton.instance;
   }
 }
 
 // Export the singleton instance
-export const CurrencyProviderCacheInstance = CurrencyProviderCacheSingleton.Instance;
+export const CurrencyRateCacheInstance = CurrencyProviderRateCacheSingleton.Instance;
