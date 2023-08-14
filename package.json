@@ -24,10 +24,10 @@
     "axios": "^1.4.0",
     "currency-codes": "^2.1.0",
     "dotenv": "^16.3.1",
+    "easy-currencies": "^1.7.0",
     "joi": "^17.9.2",
     "koa": "^2.14.2",
     "koa-body": "^6.0.1",
-    "lru-cache": "^10.0.1",
-    "number-precision": "^1.6.0"
+    "lru-cache": "^10.0.1"
   }
 }
