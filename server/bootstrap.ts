@@ -1,6 +1,6 @@
 import 'dotenv/config';
 import * as Koa from 'koa';
-import { router } from './routes';
+import { router } from './routes/routes';
 
 // Your custom initialization logic
 // For example, registering routes, plugins, etc.
@@ -15,9 +15,11 @@ function initializeApp() {
       console.error('An error occurred:', err);
 
       // Set an appropriate response status and body
-      ctx.status = err.status || 500;
+      // TODO: do not expose sensitive information, error stacks, etc.
+      ctx.status = err.status || err.code || 500;
       ctx.body = {
-        error: err.message || 'Internal Server Error',
+        message: err.message || 'Internal Server Error',
+        error: err,
       };
     }
   });

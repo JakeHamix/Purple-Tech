@@ -6,6 +6,16 @@ interface ConversionRequestBody {
 
 interface ConversionRequestResponse extends ConversionRequestBody {
   outputValue: number;
+  provider: string;
 }
 
-export { ConversionRequestBody, ConversionRequestResponse };
+enum SupportedProviders {
+  'ExchangeRateAPI' = 'ExchangeRateAPI',
+  'ExchangeRatesAPIIO' = 'ExchangeRatesAPIIO',
+  'OpenExchangeRates' = 'OpenExchangeRates',
+  'CurrencyLayer' = 'CurrencyLayer',
+  'AlphaVantage' = 'AlphaVantage',
+  'Fixer' = 'Fixer',
+}
+
+export { ConversionRequestBody, ConversionRequestResponse, SupportedProviders };

@@ -10,6 +10,7 @@
     "start": "concurrently --kill-others \"npm run server:run\"",
     "server:run": "nodemon",
     "server:build":"tsc -p ./server",
+    "server:apidoc": "apidoc --input server/routes/ --output server/docs/ --file-filters .*\\.ts",
     "test": "jest"
   }
 }
