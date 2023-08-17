@@ -4,6 +4,7 @@ import { router } from './routes/routes';
 
 // Your custom initialization logic
 // For example, registering routes, plugins, etc.
+// TODO: some sort of logging, probably pino or winston
 function initializeApp() {
   const app = new Koa();
 
