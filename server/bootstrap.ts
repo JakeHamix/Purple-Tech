@@ -36,6 +36,9 @@ function initializeApp() {
     console.log(`Koa server is listening on port ${process.env.BACKEND_PORT}`);
   });
 
+  // TODO: The app will periodically send information about the current statistics to clients using SSE
+  //  https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events
+
   // app.context is the prototype from which ctx is created.
   // You may add additional properties to ctx by editing app.context.
   // This is useful for adding properties or methods to ctx to be used across your entire app
