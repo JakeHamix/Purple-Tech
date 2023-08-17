@@ -14,8 +14,8 @@ model CurrencyConversion {
   id             Int      @id @default(autoincrement())
   createdAt      DateTime @default(now())
   provider       String   @db.VarChar(100)
-  fromCurrency   String   @db.VarChar(5)
-  toCurrency     String   @db.VarChar(5)
+  fromCurrency   String   @db.Char(3)
+  toCurrency     String   @db.Char(3)
   inputValue     Float
   outputValue    Float
   outputValueUSD Float

@@ -1,9 +1,9 @@
 import { CurrencyRateCacheInstance } from './CurrencyCache';
 import { Converter } from 'easy-currencies';
-import { SupportedProviders } from '../types/Currency';
+import { SupportedProviders, CurrencyConversion, CurrencyConversionStatistics } from '../types/Currency';
 import { providers } from 'easy-currencies/dist/parts/providers';
 import { ConvertorException } from '../exceptions';
-import { PrismaClient } from '@prisma/client'
+import prisma from '../../prisma/client';
 
 class CurrencyConvertor {
   fromCurrency: string;
@@ -33,7 +33,7 @@ class CurrencyConvertor {
 
         // Remove the default fallback API
         converter.remove(providers.ExchangeRateAPI);
-        const rates = await converter.getRates(this.fromCurrency, this.toCurrency);
+        const rates = await converter.getRates(this.fromCurrency, this.toCurrency, true);
         CurrencyRateCacheInstance.set(this.converterKey, rates);
 
         // TODO: Should limit the case of recursive calls in case something goes horribly wrong
@@ -41,7 +41,22 @@ class CurrencyConvertor {
         return this.convert();
       }
 
-      return new Converter().convertRate(this.inputValue, this.toCurrency, cachedRates);
+      // Assume that the rates has USD by default, since we are pulling the whole list. If it isn't present, we'll have a problem.
+      const converter = new Converter();
+      const convertedValue = await converter.convertRate(this.inputValue, this.toCurrency, cachedRates);
+      const convertedValueUSD = await converter.convertRate(this.inputValue, 'USD', cachedRates);
+
+      // Store the conversion
+      await this.storeConversion({
+        provider: this.provider,
+        fromCurrency: this.fromCurrency,
+        toCurrency: this.toCurrency,
+        inputValue: this.inputValue,
+        outputValue: convertedValue,
+        outputValueUSD: convertedValueUSD,
+      });
+
+      return convertedValue;
     } catch (err) {
       throw new ConvertorException(`The conversion failed: ${err?.message || err}.`, 500, {
         err,
@@ -53,15 +68,42 @@ class CurrencyConvertor {
     }
   }
 
-  async storeConversion() {
-    // TODO: Store the conversion details in DB, this is the minimum:
-    //  -Most popular destination currency
-    //  -Total amount converted (in USD)
-    //  -Total number of conversion requests made
+  async storeConversion(conversion: CurrencyConversion) {
+    await prisma.currencyConversion.create({
+      data: conversion,
+    });
   }
 
-  async getConversionStatistics() {
+  /**
+   * Retrieves the following information about the conversions made:
+   * - Most popular destination currency
+   * - Total amount converted (in USD)
+   * - Total number of conversion requests made
+   */
+  async getConversionStatistics(): Promise<CurrencyConversionStatistics> {
+    const [[{ toCurrency: mostPopularCurrency }], { _count: conversionsCount, _sum: { outputValueUSD: amountConvertedUSD } }] = await Promise.all([
+      prisma.currencyConversion.groupBy({
+        by: ['toCurrency'],
+        orderBy: {
+          _count: {
+            toCurrency: 'desc',
+          }
+        },
+        take: 1,
+      }),
+      prisma.currencyConversion.aggregate({
+        _count: true,
+        _sum: {
+          'outputValueUSD': true,
+        }
+      }),
+    ]);
 
+    return {
+      mostPopularCurrency,
+      amountConvertedUSD,
+      conversionsCount,
+    }
   }
 }
 

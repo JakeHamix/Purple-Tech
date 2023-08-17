@@ -86,8 +86,8 @@ router.post('/convert', koaBody(), async (ctx) => {
 
     // Perform currency conversion logic here. Api calls, caching ...
     const convertor = new CurrencyConvertor(fromCurrency, toCurrency, inputValue, provider);
-
     const convertedValue = await convertor.convert();
+
     const response: ConversionRequestResponse = {
       provider,
       fromCurrency,

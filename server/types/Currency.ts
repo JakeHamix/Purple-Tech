@@ -20,4 +20,10 @@ interface CurrencyConversion {
   outputValueUSD: number;
 }
 
-export { ConversionRequestBody, ConversionRequestResponse, SupportedProviders, CurrencyConversion };
+interface CurrencyConversionStatistics {
+  mostPopularCurrency: string,
+  conversionsCount: number,
+  amountConvertedUSD: number,
+}
+
+export { ConversionRequestBody, ConversionRequestResponse, SupportedProviders, CurrencyConversion, CurrencyConversionStatistics };
