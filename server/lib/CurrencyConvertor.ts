@@ -54,7 +54,10 @@ class CurrencyConvertor {
   }
 
   async storeConversion() {
-
+    // TODO: Store the conversion details in DB, this is the minimum:
+    //  -Most popular destination currency
+    //  -Total amount converted (in USD)
+    //  -Total number of conversion requests made
   }
 
   async getConversionStatistics() {

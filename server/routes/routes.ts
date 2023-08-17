@@ -87,11 +87,6 @@ router.post('/convert', koaBody(), async (ctx) => {
     // Perform currency conversion logic here. Api calls, caching ...
     const convertor = new CurrencyConvertor(fromCurrency, toCurrency, inputValue, provider);
 
-    // TODO: Store the conversion details in DB, this is the minimum:
-    //  -Most popular destination currency
-    //  -Total amount converted (in USD)
-    //  -Total number of conversion requests made
-
     const convertedValue = await convertor.convert();
     const response: ConversionRequestResponse = {
       provider,
