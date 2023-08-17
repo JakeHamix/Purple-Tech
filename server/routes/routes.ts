@@ -73,6 +73,7 @@ router.get('/ping', (ctx) => {
  * }
  */
 router.post('/convert', koaBody(), async (ctx) => {
+  // TODO: Ratelimiter @https://www.npmjs.com/package/limiter
   try {
     // Validate the properties presence, format and values in the schema
     await ConversionRequestSchema.validateAsync(ctx.request.body).catch((err) => {
