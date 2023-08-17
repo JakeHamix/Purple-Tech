@@ -13,6 +13,7 @@ datasource db {
 model CurrencyConversion {
   id             Int      @id @default(autoincrement())
   createdAt      DateTime @default(now())
+  provider       String   @db.VarChar(100)
   fromCurrency   String   @db.VarChar(5)
   toCurrency     String   @db.VarChar(5)
   inputValue     Float

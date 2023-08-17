@@ -1,8 +1,9 @@
 import { CurrencyRateCacheInstance } from './CurrencyCache';
 import { Converter } from 'easy-currencies';
-import { SupportedProviders } from '../types';
+import { SupportedProviders } from '../types/Currency';
 import { providers } from 'easy-currencies/dist/parts/providers';
 import { ConvertorException } from '../exceptions';
+import { PrismaClient } from '@prisma/client'
 
 class CurrencyConvertor {
   fromCurrency: string;
@@ -50,6 +51,14 @@ class CurrencyConvertor {
         inputValue: this.inputValue,
       });
     }
+  }
+
+  async storeConversion() {
+
+  }
+
+  async getConversionStatistics() {
+
   }
 }
 

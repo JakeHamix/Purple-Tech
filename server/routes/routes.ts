@@ -1,7 +1,7 @@
 import * as Router from '@koa/router';
 import koaBody from 'koa-body';
 import { ConversionRequestSchema } from '../schema';
-import { ConversionRequestBody, ConversionRequestResponse, SupportedProviders } from '../types';
+import { ConversionRequestBody, ConversionRequestResponse, SupportedProviders } from '../types/Currency';
 import CurrencyConvertor from '../lib/CurrencyConvertor';
 import { UserException } from '../exceptions';
 
