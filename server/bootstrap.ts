@@ -1,13 +1,21 @@
 import 'dotenv/config';
 import * as Koa from 'koa';
 import { router } from './routes/routes';
+import pino = require('koa-pino-logger');
 
 // Your custom initialization logic
 // For example, registering routes, plugins, etc.
-// TODO: some sort of logging, probably pino or winston
 function initializeApp() {
   const app = new Koa();
 
+  // Pretty pino local logs for local development and debugging
+  if (process.env.NODE_ENV === 'development') {
+    app.use(pino({
+      transport: {
+        target: 'pino-pretty',
+      }
+    }));
+  }
   app.use(async (ctx, next) => {
     try {
       await next();
