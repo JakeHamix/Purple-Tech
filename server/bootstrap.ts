@@ -2,11 +2,16 @@ import 'dotenv/config';
 import * as Koa from 'koa';
 import { router } from './routes/routes';
 import pino = require('koa-pino-logger');
+import cors = require('@koa/cors');
+
 
 // Your custom initialization logic
 // For example, registering routes, plugins, etc.
 function initializeApp() {
   const app = new Koa();
+
+  // Enable cors
+  app.use(cors())
 
   // Pretty pino local logs for local development and debugging
   if (process.env.NODE_ENV === 'development') {

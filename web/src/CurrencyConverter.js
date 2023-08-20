@@ -1,13 +1,20 @@
 import React, { useState } from 'react';
 import * as currencyCodes from 'currency-codes';
 import getSymbolFromCurrency from 'currency-symbol-map'
-import { Container, InputGroup, FormControl, DropdownButton, Dropdown, Button } from 'react-bootstrap';
+import { Container, InputGroup, FormControl, Button } from 'react-bootstrap';
+import FilterableDropdown from './FilterableDropdown';
+import axios from 'axios';
 
 const CurrencyConverter = () => {
-  const [amount, setAmount] = useState('');
-  const [baseCurrency, setBaseCurrency] = useState('USD');
-  const [targetCurrency, setTargetCurrency] = useState('EUR');
+  const [amount, setAmount] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [convertedAmount, setConvertedAmount] = useState(null);
+
+  const defaultBaseCurrencyOption = { code: 'USD', name: 'US Dollar', symbol: '$' };
+  const [selectedBaseCurrencyOption, setSelectedBaseCurrencyOption] = useState(defaultBaseCurrencyOption);
+
+  const defaultTargetCurrencyOption = { code: 'EUR', name: 'Euro', symbol: '€' };
+  const [selectedTargetCurrencyOption, setSelectedTargetCurrencyOption] = useState(defaultTargetCurrencyOption);
 
   const availableCurrencies = currencyCodes.data;
   const currencyOptions = availableCurrencies.map(currency => {
@@ -17,24 +24,52 @@ const CurrencyConverter = () => {
     }
   });
 
-  // This is a basic example, you might need to fetch actual exchange rates
-  // const exchangeRates = {
-  //   USD: 1,
-  //   EUR: 0.85,
-  //   GBP: 0.72,
-  //   // Add more currencies and their rates
-  // };
-
   const handleConvert = () => {
-    const convertedValue = amount * 2; // For demonstration purposes
-    setConvertedAmount(convertedValue);
+    if (!amount || loading) return; // Return if no amount or request is loading
+
+    setLoading(true); // Start loading
+
+    // Prepare payload for the request
+    const payload = {
+      fromCurrency: selectedBaseCurrencyOption.code,
+      toCurrency: selectedTargetCurrencyOption.code,
+      inputValue: parseFloat(amount),
+    };
+
+    // Send POST request using axios
+    axios
+      .post('http://localhost:3001/api/convert', payload, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      .then(response => {
+        setLoading(false);
+        console.log(response);
+        // Update state with converted value and stop loading
+        setConvertedAmount(response.data.outputValue);
+      })
+      .catch(error => {
+        setLoading(false); // Stop loading in case of an error
+        console.error('Error:', error);
+        setConvertedAmount(error.message);
+      });
+  };
+
+  const handleSwapCurrencies = () => {
+    // Swap the values of base and target currencies
+    setConvertedAmount(null);
+
+    // TODO: Refactor the FilterableDropdown to a React.Component, so its state can be properly managed!
+    setSelectedBaseCurrencyOption(selectedTargetCurrencyOption);
+    setSelectedTargetCurrencyOption(selectedBaseCurrencyOption);
   };
 
   return (
     <Container className="my-4 p-4 bg-light rounded shadow">
       <h1 className="text-center mb-4 text-black">Currency Converter</h1>
 
-      <InputGroup className="mb-3 flex-grow-1">
+      <InputGroup className="mb-3 w-75 mx-auto">
         <FormControl
             type="number"
             value={amount}
@@ -43,50 +78,55 @@ const CurrencyConverter = () => {
             className="text-center"
         />
 
-        <DropdownButton
-          as={InputGroup.Append}
-          title={baseCurrency}
-          id="base-currency-dropdown"
-        >
-          {currencyOptions.map((option) => (
-            <Dropdown.Item
-              key={option.code}
-              onClick={() => setBaseCurrency(option.code)}
-            >
-              {option.code} - {option.name}
-            </Dropdown.Item>
-          ))}
-        </DropdownButton>
+        <InputGroup.Text
+        as={InputGroup.Append}>
+          {selectedBaseCurrencyOption.symbol}
+        </InputGroup.Text>
 
-        <DropdownButton
-          as={InputGroup.Append}
-          title={targetCurrency}
-          id="target-currency-dropdown"
+        <FilterableDropdown
+        options={currencyOptions}
+        onSelect={option => setSelectedBaseCurrencyOption(option)}
+        defaultValue={defaultBaseCurrencyOption}
         >
-          {currencyOptions.map((option) => (
-            <Dropdown.Item
-              key={option.code}
-              onClick={() => setTargetCurrency(option.code)}
-            >
-              {option.code} - {option.name}
-            </Dropdown.Item>
-          ))}
-        </DropdownButton>
+        </FilterableDropdown>
+
+        <Button
+          variant="outline-secondary"
+          onClick={handleSwapCurrencies}
+          className="m-3"
+          style={{ transform: 'rotate(90deg)' }}
+        >
+          ⇅
+        </Button>
+
+        <InputGroup.Text
+          as={InputGroup.Append}>
+          {selectedTargetCurrencyOption.symbol}
+        </InputGroup.Text>
+
+        <FilterableDropdown
+          options={currencyOptions}
+          onSelect={option => setSelectedTargetCurrencyOption(option)}
+          defaultValue={defaultTargetCurrencyOption}
+        >
+        </FilterableDropdown>
+
       </InputGroup>
 
       <Button
         variant="primary"
         onClick={handleConvert}
         className="w-25"
+        disabled={!amount} // Disable button when amount is empty
       >
         Convert
       </Button>
 
-      {convertedAmount !== null && (
-        <p className="text-center mt-4">
-          Converted amount: {convertedAmount.toFixed(2)}
+      {convertedAmount !== null && typeof convertedAmount === "number" && (
+        <p className="text-center mt-4 text-black">
+           Converted amount: {convertedAmount.toFixed(2)} {selectedTargetCurrencyOption.symbol}
         </p>
-      )}
+      ) || (typeof convertedAmount === "string" && <p className="text-center mt-4 text-black"> Error: {convertedAmount}</p>)}
     </Container>
   );
 };
