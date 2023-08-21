@@ -4,6 +4,8 @@ import { ConversionRequestSchema } from '../schema';
 import { ConversionRequestBody, ConversionRequestResponse, SupportedProviders } from '../types/Currency';
 import CurrencyConvertor from '../lib/CurrencyConvertor';
 import { UserException } from '../exceptions';
+// @ts-ignore
+import sseStream = require('koa-sse-stream');
 
 const router = new Router({
   prefix: '/api',
@@ -101,6 +103,24 @@ router.post('/convert', koaBody(), async (ctx) => {
   } catch (err) {
     throw err;
   }
+});
+
+router.get('/sse', sseStream({
+  maxClients: 100,
+  pingInterval: 30000,
+}), async (ctx) => {
+  const initialData = await CurrencyConvertor.getConversionStatistics();
+  ctx.sse.send(JSON.stringify(initialData));
+
+  const interval = setInterval(async () => {
+    const freshData = await CurrencyConvertor.getConversionStatistics();
+    ctx.sse.send(JSON.stringify(freshData));
+  }, 10000); // Update every 10 seconds
+
+  // Clean up when the client disconnects
+  ctx.res.on('close', () => {
+    clearInterval(interval);
+  });
 });
 
 export { router };

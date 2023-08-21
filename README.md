@@ -14,6 +14,7 @@
   - Prepare backend and frontend bundles for production serving (and docs!) 🛠️
 - `npm run start`
   - Start the whole application
+- If you want to run the application from the source, use `npm run start:dev`
 
 ##  🧪 Tests
 - There are mostly just placeholder tests, but the project is ready for them, based on [ts-jest](https://www.npmjs.com/package/ts-jest) 

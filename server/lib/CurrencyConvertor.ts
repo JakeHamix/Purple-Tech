@@ -80,7 +80,7 @@ class CurrencyConvertor {
    * - Total amount converted (in USD)
    * - Total number of conversion requests made
    */
-  async getConversionStatistics(): Promise<CurrencyConversionStatistics> {
+  static async getConversionStatistics(): Promise<CurrencyConversionStatistics> {
     const [[{ toCurrency: mostPopularCurrency }], { _count: conversionsCount, _sum: { outputValueUSD: amountConvertedUSD } }] = await Promise.all([
       prisma.currencyConversion.groupBy({
         by: ['toCurrency'],
