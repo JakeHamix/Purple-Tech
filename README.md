@@ -37,6 +37,7 @@ As for the frontend, it's a simple React app made mostly using [bootstrap](https
 - Application (red)locks for rate fetches could also be viable 🔒, but due to caching it's not critical
 - A very interesting part would be a Redis based scoreboard/leaderboard 🏆. The aggregated statistics are a plain ol' SQL query, but if we used the currencies as 'players' 🎮 we could have quick access to some interesting scenarios
 - The frontend `convert` button could also use some `debounce/throttle` mechanism ⚡
+- ... tests 😅
 
 ## 📝 Final note
 I have intentionally avoided 'heavy' modules for demonstration purposes. The first version of this application was created using [Redwood](https://redwoodjs.com/) and while it was pretty cool, it did most of the job for me 🤖.
