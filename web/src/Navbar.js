@@ -10,8 +10,8 @@ const NavbarComponent = () => {
     const eventSource = new EventSource('http://localhost:3001/api/sse');
 
     eventSource.onmessage = (event) => {
+      // TODO: Some nice transition animations - the numbers will be only going up and the currency ISO codes have the same length
       const data = JSON.parse(event.data);
-      console.log(data, 'data');
       setFavoriteCurrency(data.mostPopularCurrency);
       setTotalRequests(data.conversionsCount);
       setTotalConvertedAmount(data.amountConvertedUSD);
@@ -33,11 +33,11 @@ const NavbarComponent = () => {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <ul className="navbar-nav ml-auto border-top border-black">
-            <li className="nav-item m-1">Favorite Destination Currency: {favoriteCurrency}</li>
+            <li className="nav-item m-1"><b>Favorite Destination Currency:</b> {favoriteCurrency}</li>
             <li>|</li>
-            <li className="nav-item m-1">Total Requests: {totalRequests}</li>
+            <li className="nav-item m-1"><b>Total Requests:</b> {totalRequests}</li>
             <li>|</li>
-            <li className="nav-item m-1">Total Converted Amount: ${typeof totalConvertedAmount === "number" ? totalConvertedAmount.toFixed(2) : totalConvertedAmount.toString()}</li>
+            <li className="nav-item m-1"><b>Total Converted Amount:</b> ${typeof totalConvertedAmount === "number" ? totalConvertedAmount.toFixed(2) : totalConvertedAmount.toString()}</li>
           </ul>
         </Navbar.Collapse>
       </Container>

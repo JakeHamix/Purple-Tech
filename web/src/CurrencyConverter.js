@@ -80,11 +80,13 @@ const CurrencyConverter = () => {
 
         <InputGroup.Text as={InputGroup.Append}>{selectedBaseCurrencyOption.symbol}</InputGroup.Text>
 
+        {/*Base currency*/}
         <FilterableDropdown
           options={currencyOptions}
           onSelect={(option) => setSelectedBaseCurrencyOption(option)}
           value={selectedBaseCurrencyOption}
-          setValue={setSelectedTargetCurrencyOption}
+          setValue={setSelectedBaseCurrencyOption}
+          setConvertedAmount={setConvertedAmount}
         ></FilterableDropdown>
 
         <Button
@@ -98,14 +100,17 @@ const CurrencyConverter = () => {
 
         <InputGroup.Text as={InputGroup.Append}>{selectedTargetCurrencyOption.symbol}</InputGroup.Text>
 
+        {/*Target currency*/}
         <FilterableDropdown
           options={currencyOptions}
           onSelect={(option) => setSelectedTargetCurrencyOption(option)}
           value={selectedTargetCurrencyOption}
           setValue={setSelectedTargetCurrencyOption}
+          setConvertedAmount={setConvertedAmount}
         ></FilterableDropdown>
       </InputGroup>
 
+      {/*TODO: Debounce or throttle this button*/}
       <Button
         variant="primary"
         onClick={handleConvert}
@@ -116,14 +121,14 @@ const CurrencyConverter = () => {
       </Button>
 
       {(convertedAmount !== null && typeof convertedAmount === 'number' && (
-        <p className="text-center mt-4 text-black">
+        <p className="text-center mt-4 text-black border-success">
           Converted amount: {convertedAmount.toFixed(2)} {selectedTargetCurrencyOption.symbol}
         </p>
       )) || (loading && (
-        <p className="text-center mt-4 text-black">Loading...</p>
+        <p className="text-center mt-4 text-black border border-black">Loading...</p>
       )) ||
         (typeof convertedAmount === 'string' && (
-          <p className="text-center mt-4 text-black"> Error: {convertedAmount}</p>
+          <p className="text-center mt-4 text-black border border-red-600"> Error: {convertedAmount}</p>
         ))}
     </Container>
   );

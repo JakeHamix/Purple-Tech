@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Dropdown } from 'react-bootstrap';
 
-const FilterableDropdown = ({ options, onSelect, value, setValue }) => {
+const FilterableDropdown = ({ options, onSelect, value, setValue, setConvertedAmount }) => {
   const [dropdownOptions, setDropdownOptions] = useState(options);
 
   return (
@@ -18,11 +18,12 @@ const FilterableDropdown = ({ options, onSelect, value, setValue }) => {
           className="form-control"
         />
       </Dropdown.Toggle>
-      <Dropdown.Menu>
+      <Dropdown.Menu className="CurrencyDropdown">
         {dropdownOptions.map((option) => (
           <Dropdown.Item
             key={option.code}
             onClick={() => {
+              setConvertedAmount(null);
               setValue(option);
               onSelect(option);
             }}
