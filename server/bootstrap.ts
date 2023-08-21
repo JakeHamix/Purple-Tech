@@ -1,7 +1,6 @@
 import 'dotenv/config';
 import * as Koa from 'koa';
 import { router } from './routes/routes';
-import pino = require('koa-pino-logger');
 import cors = require('@koa/cors');
 
 
@@ -14,13 +13,13 @@ function initializeApp() {
   app.use(cors())
 
   // Pretty pino local logs for local development and debugging
-  if (process.env.NODE_ENV === 'development') {
-    app.use(pino({
-      transport: {
-        target: 'pino-pretty',
-      }
-    }));
-  }
+  // if (process.env.NODE_ENV === 'development') {
+  //   app.use(pino({
+  //     transport: {
+  //       target: 'pino-pretty',
+  //     }
+  //   }));
+  // }
   app.use(async (ctx, next) => {
     try {
       await next();
