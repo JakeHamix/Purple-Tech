@@ -83,7 +83,7 @@ router.post('/convert', koaBody(), async (ctx) => {
     const { fromCurrency, toCurrency, inputValue } = payload;
 
     // Hard coded the rates provider here, but it can easily be changed
-    const provider: SupportedProviders = SupportedProviders.OpenExchangeRates;
+    const provider: SupportedProviders = SupportedProviders.ExchangeRateAPI;
 
     // Perform currency conversion logic here. Api calls, caching ...
     const convertor = new CurrencyConvertor(fromCurrency, toCurrency, inputValue, provider);

@@ -29,10 +29,10 @@ class CurrencyConvertor {
         // TODO: This is dangerous and could be used to leak unintended env variables! The type-check is not secure enough.
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        const converter = new Converter(this.provider, process.env[`${this.provider.toUpperCase()}_API_KEY`]);
+        const converter = new Converter(this.provider/*, process.env[`${this.provider.toUpperCase()}_API_KEY`]*/);
 
         // Remove the default fallback API
-        converter.remove(providers.ExchangeRateAPI);
+        // converter.remove(providers.ExchangeRateAPI);
         const rates = await converter.getRates(this.fromCurrency, this.toCurrency, true);
         CurrencyRateCacheInstance.set(this.converterKey, rates);
 

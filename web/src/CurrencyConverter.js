@@ -119,6 +119,8 @@ const CurrencyConverter = () => {
         <p className="text-center mt-4 text-black">
           Converted amount: {convertedAmount.toFixed(2)} {selectedTargetCurrencyOption.symbol}
         </p>
+      )) || (loading && (
+        <p className="text-center mt-4 text-black">Loading...</p>
       )) ||
         (typeof convertedAmount === 'string' && (
           <p className="text-center mt-4 text-black"> Error: {convertedAmount}</p>
