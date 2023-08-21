@@ -81,28 +81,40 @@ class CurrencyConvertor {
    * - Total number of conversion requests made
    */
   static async getConversionStatistics(): Promise<CurrencyConversionStatistics> {
-    const [[{ toCurrency: mostPopularCurrency }], { _count: conversionsCount, _sum: { outputValueUSD: amountConvertedUSD } }] = await Promise.all([
-      prisma.currencyConversion.groupBy({
-        by: ['toCurrency'],
-        orderBy: {
-          _count: {
-            toCurrency: 'desc',
+    try {
+      const [[{toCurrency: mostPopularCurrency}], {
+        _count: conversionsCount,
+        _sum: {outputValueUSD: amountConvertedUSD}
+      }] = await Promise.all([
+        prisma.currencyConversion.groupBy({
+          by: ['toCurrency'],
+          orderBy: {
+            _count: {
+              toCurrency: 'desc',
+            }
+          },
+          take: 1,
+        }),
+        prisma.currencyConversion.aggregate({
+          _count: true,
+          _sum: {
+            'outputValueUSD': true,
           }
-        },
-        take: 1,
-      }),
-      prisma.currencyConversion.aggregate({
-        _count: true,
-        _sum: {
-          'outputValueUSD': true,
-        }
-      }),
-    ]);
-
-    return {
-      mostPopularCurrency,
-      amountConvertedUSD,
-      conversionsCount,
+        }),
+      ]);
+      return {
+        mostPopularCurrency,
+        amountConvertedUSD,
+        conversionsCount,
+      }
+    } catch (err) {
+      console.log(err);
+      // Expected to happen if there are no records in the database => there is nothing to destructure
+      return {
+        mostPopularCurrency: '???',
+        amountConvertedUSD: 0,
+        conversionsCount: 0,
+      }
     }
   }
 }
