@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import * as currencyCodes from 'currency-codes';
-import getSymbolFromCurrency from 'currency-symbol-map'
+import getSymbolFromCurrency from 'currency-symbol-map';
 import { Container, InputGroup, FormControl, Button } from 'react-bootstrap';
 import FilterableDropdown from './FilterableDropdown';
 import axios from 'axios';
@@ -17,11 +17,11 @@ const CurrencyConverter = () => {
   const [selectedTargetCurrencyOption, setSelectedTargetCurrencyOption] = useState(defaultTargetCurrencyOption);
 
   const availableCurrencies = currencyCodes.data;
-  const currencyOptions = availableCurrencies.map(currency => {
+  const currencyOptions = availableCurrencies.map((currency) => {
     return {
       ...currency,
       symbol: getSymbolFromCurrency(currency.code),
-    }
+    };
   });
 
   const handleConvert = () => {
@@ -43,13 +43,13 @@ const CurrencyConverter = () => {
           'Content-Type': 'application/json',
         },
       })
-      .then(response => {
+      .then((response) => {
         setLoading(false);
         console.log(response);
         // Update state with converted value and stop loading
         setConvertedAmount(response.data.outputValue);
       })
-      .catch(error => {
+      .catch((error) => {
         setLoading(false); // Stop loading in case of an error
         console.error('Error:', error);
         setConvertedAmount(error.message);
@@ -71,24 +71,21 @@ const CurrencyConverter = () => {
 
       <InputGroup className="mb-3 w-75 mx-auto">
         <FormControl
-            type="number"
-            value={amount}
-            onChange={(e) => setAmount(e.target.value)}
-            placeholder="Enter amount"
-            className="text-center"
+          type="number"
+          value={amount}
+          onChange={(e) => setAmount(e.target.value)}
+          placeholder="Enter amount"
+          className="text-center"
         />
 
-        <InputGroup.Text
-        as={InputGroup.Append}>
-          {selectedBaseCurrencyOption.symbol}
-        </InputGroup.Text>
+        <InputGroup.Text as={InputGroup.Append}>{selectedBaseCurrencyOption.symbol}</InputGroup.Text>
 
         <FilterableDropdown
-        options={currencyOptions}
-        onSelect={option => setSelectedBaseCurrencyOption(option)}
-        defaultValue={defaultBaseCurrencyOption}
-        >
-        </FilterableDropdown>
+          options={currencyOptions}
+          onSelect={(option) => setSelectedBaseCurrencyOption(option)}
+          value={selectedBaseCurrencyOption}
+          setValue={setSelectedTargetCurrencyOption}
+        ></FilterableDropdown>
 
         <Button
           variant="outline-secondary"
@@ -99,18 +96,14 @@ const CurrencyConverter = () => {
           ⇅
         </Button>
 
-        <InputGroup.Text
-          as={InputGroup.Append}>
-          {selectedTargetCurrencyOption.symbol}
-        </InputGroup.Text>
+        <InputGroup.Text as={InputGroup.Append}>{selectedTargetCurrencyOption.symbol}</InputGroup.Text>
 
         <FilterableDropdown
           options={currencyOptions}
-          onSelect={option => setSelectedTargetCurrencyOption(option)}
-          defaultValue={defaultTargetCurrencyOption}
-        >
-        </FilterableDropdown>
-
+          onSelect={(option) => setSelectedTargetCurrencyOption(option)}
+          value={selectedTargetCurrencyOption}
+          setValue={setSelectedTargetCurrencyOption}
+        ></FilterableDropdown>
       </InputGroup>
 
       <Button
@@ -122,11 +115,14 @@ const CurrencyConverter = () => {
         Convert
       </Button>
 
-      {convertedAmount !== null && typeof convertedAmount === "number" && (
+      {(convertedAmount !== null && typeof convertedAmount === 'number' && (
         <p className="text-center mt-4 text-black">
-           Converted amount: {convertedAmount.toFixed(2)} {selectedTargetCurrencyOption.symbol}
+          Converted amount: {convertedAmount.toFixed(2)} {selectedTargetCurrencyOption.symbol}
         </p>
-      ) || (typeof convertedAmount === "string" && <p className="text-center mt-4 text-black"> Error: {convertedAmount}</p>)}
+      )) ||
+        (typeof convertedAmount === 'string' && (
+          <p className="text-center mt-4 text-black"> Error: {convertedAmount}</p>
+        ))}
     </Container>
   );
 };

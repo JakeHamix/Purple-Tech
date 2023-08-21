@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { Dropdown } from 'react-bootstrap';
 
-const FilterableDropdown = ({ options, onSelect, defaultValue }) => {
-  const [selectedItemTitle, setSelectedItemTitle] = useState(defaultValue.code);
+const FilterableDropdown = ({ options, onSelect, value, setValue }) => {
   const [dropdownOptions, setDropdownOptions] = useState(options);
 
   return (
@@ -11,20 +10,20 @@ const FilterableDropdown = ({ options, onSelect, defaultValue }) => {
         <input
           type="text"
           placeholder="Type to search..."
-          value={selectedItemTitle}
+          value={value.code}
           onChange={(e) => {
-            setSelectedItemTitle(e.target.value);
-            setDropdownOptions(options.filter(option => option.code.startsWith(e.target.value.toUpperCase())));
+            setValue(e.target.value);
+            setDropdownOptions(options.filter((option) => option.code.startsWith(e.target.value.toUpperCase())));
           }}
           className="form-control"
         />
       </Dropdown.Toggle>
       <Dropdown.Menu>
-        {dropdownOptions.map(option => (
+        {dropdownOptions.map((option) => (
           <Dropdown.Item
             key={option.code}
             onClick={() => {
-              setSelectedItemTitle(option.code);
+              setValue(option);
               onSelect(option);
             }}
           >
