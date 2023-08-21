@@ -9,7 +9,7 @@
   "scripts": {
     "init": "npm i && docker compose up --wait && (sleep 3 || timeout /t 3)  && prisma migrate deploy && npm run-script -w web build",
     "build": "concurrently \"npm run-script -w web build\"  \"npm run-script -w server build\"",
-    "start": "concurrently --kill-others \"npm run server:run\" \"serve ./web/build\"",
+    "start": "concurrently --kill-others \"nodemon\" \"serve ./web/build\"",
     "test": "jest"
   },
   "dependencies": {

@@ -12,5 +12,5 @@
     "NODE_ENV": "development"
   },
   "ext": "ts",
-  "exec": "ts-node --files ./server/app.ts"
+  "exec": "node ./server/dist/server/app.js"
 }
