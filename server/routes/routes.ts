@@ -16,7 +16,7 @@ const router = new Router({
  * @apiName Ping-Pong
  * @apiGroup Telemetry
  *
- * @apiVersion 0.0.0
+ * @apiVersion 1.0.0
  *
  * @apiDescription This endpoint should serve as a simple check that the server is up & running
  *
@@ -39,7 +39,7 @@ router.get('/ping', (ctx) => {
  * @apiName ConvertCurrency
  * @apiGroup Currency
  *
- * @apiVersion 0.0.0
+ * @apiVersion 1.0.0
  *
  * @apiDescription This endpoint will convert any supported currency to a given currency. The value of the currency might not be exact because of small delays due to caching - use at your own risk!
  *
@@ -110,7 +110,7 @@ router.post('/convert', koaBody(), async (ctx) => {
  * @apiName Currency Statistics
  * @apiGroup Currency
  *
- * @apiVersion 0.0.0
+ * @apiVersion 1.0.0
  *
  * @apiDescription Subscribe to live currency statistics over Server-Sent-Events
  *
