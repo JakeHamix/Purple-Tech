@@ -7,7 +7,7 @@
     "web"
   ],
   "scripts": {
-    "init": "npm i && docker compose up --wait && (sleep 3 || timeout /t 3)  && prisma migrate deploy && npm run-script -w web build",
+    "init": "npm i && docker compose up --wait && (sleep 3 || timeout /t 3)  && prisma migrate deploy",
     "build": "concurrently \"npm run-script -w web build\"  \"npm run-script -w server build\"",
     "start": "concurrently --kill-others \"nodemon\" \"serve ./web/build\"",
     "start:dev": "concurrently --kill-others \"ts-node --files ./server/app.ts\" \"npm run-script -w web start\"",
