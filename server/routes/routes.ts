@@ -105,6 +105,28 @@ router.post('/convert', koaBody(), async (ctx) => {
   }
 });
 
+/**
+ * @api {get} /api/sse Subscribe to live statistics
+ * @apiName Currency Statistics
+ * @apiGroup Currency
+ *
+ * @apiVersion 0.0.0
+ *
+ * @apiDescription Subscribe to live currency statistics over Server-Sent-Events
+ *
+ * @apiSuccess (200) {EventStream} stream
+ * @apiSuccessExample {json} Success-Response:
+ * {
+ *   "data": "{
+ *       "mostPopularCurrency": "EUR",
+ *       "conversionsCount": 54,
+ *       "amountConvertedUSD": 477.67
+ *   }"
+ * }
+ *
+ * @apiError (500) FatalError Something went horribly wrong!
+ *
+ */
 router.get('/sse', sseStream({
   maxClients: 100,
   pingInterval: 30000,
