@@ -26,13 +26,13 @@ services:
 #      - "8080:8978"
 #    networks:
 #      - database-network
-  redis-stack:
-    container_name: redis_stack_container
-    image: redis/redis-stack:latest
-    restart: always
-    ports:
-      - "6379:6379"
-      - "8001:8001"
+#  redis-stack:
+#    container_name: redis_stack_container
+#    image: redis/redis-stack:latest
+#    restart: always
+#    ports:
+#      - "6379:6379"
+#      - "8001:8001"
 networks:
   database-network:
     driver: bridge

@@ -1,5 +1,6 @@
 ## ⚠️ Disclaimer
 - The frontend is very minimalistic, don't be frightened - it just works
+- The `.env` file is part of the repository just for 'quick startup' purposes, I am otherwise a rather sane person
 - The application is prepared to fetch data from various supported providers, but you will need to provide a valid API key. If you don't provide one, the default will be used.
   - [ExchangeRatesAPI](https://exchangeratesapi.io/) (default, no API key required)
   - [CurrencyLayer](https://currencylayer.com/) (requires an api key with base currency supoprt)
