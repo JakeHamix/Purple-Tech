@@ -11,7 +11,8 @@
     "server:run": "nodemon",
     "server:build": "tsc -p ./server",
     "server:apidoc": "apidoc --input server/routes/ --output server/docs/ --file-filters .*\\.ts",
-    "test": "jest"
+    "test": "jest",
+    "init": "npm i && docker compose up --wait && (sleep 3 || timeout /t 3)  && prisma migrate deploy"
   },
   "dependencies": {
     "@prisma/client": "^5.1.1",
