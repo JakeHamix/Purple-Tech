@@ -7,13 +7,14 @@
     "web"
   ],
   "scripts": {
-    "start": "concurrently --kill-others \"npm run server:run\"",
+    "start": "concurrently --kill-others \"npm run server:run\" \"serve ./web/build\"",
     "server:run": "nodemon",
     "server:build": "tsc -p ./server",
     "server:apidoc": "apidoc --input server/routes/ --output server/docs/ --file-filters .*\\.ts",
     "test": "jest"
   },
   "dependencies": {
-    "@prisma/client": "^5.1.1"
+    "@prisma/client": "^5.1.1",
+    "serve": "^14.2.0"
   }
 }
